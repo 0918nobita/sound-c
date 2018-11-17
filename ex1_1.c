@@ -12,7 +12,10 @@ void wave_read_16bit_mono(MONO_PCM *pcm, char *file_name) {
 
   char riff_chunk_ID[4];  // 'R', 'I', 'F', 'F' 固定
   fread(riff_chunk_ID, 1, 4, fp);
-  printf("%c%c%c%c\n", riff_chunk_ID[0], riff_chunk_ID[1], riff_chunk_ID[2], riff_chunk_ID[3]);
+  printf("RIFF Chunk ID: %c%c%c%c\n", riff_chunk_ID[0], riff_chunk_ID[1], riff_chunk_ID[2], riff_chunk_ID[3]);
 
+  long riff_chunk_size;  // [byte] 36 + (data チャンクのサイズ)
+  fread(&riff_chunk_size, 4, 1, fp);
+  printf("RIFF Chunk Size: %ld\n", riff_chunk_size);
   fclose(fp);
 }
