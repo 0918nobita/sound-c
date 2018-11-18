@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+// #include <math.h>  // デバッグ用
 #include "ex1_1.h"
 
 int main(void) {
@@ -65,6 +67,24 @@ void wave_read_16bit_mono(MONO_PCM *pcm, char *file_name) {
   int data_chunk_size;  // 音データの長さ * channel
   fread(&data_chunk_size, 4, 1, fp);
   printf("Data Chunk Size: %d\n", data_chunk_size);
+
+  pcm->fs = samples_per_sec; 
+  pcm->bits = bits_per_sample;
+  pcm->length = data_chunk_size / channel;  // 音データの長さ
+  pcm->s = calloc(pcm->length, sizeof(double));  // メモリ確保
+
+  for (int n = 0; n < pcm->length; n++) {
+    short data;
+    fread(&data, 2, 1, fp);
+    pcm->s[n] = (double)data / 32768.0;  // 音データを -1 以上 1 未満の範囲に正規化する
+
+    /*
+    if (n >= 1) {  // 値が変化している場合、前後の値を出力する
+      double diff = pcm->s[n] - pcm->s[n-1];
+      if (fabs(diff) != 0.0) printf("%lf, ", diff);
+    }
+    */
+  }
 
   fclose(fp);
 }
