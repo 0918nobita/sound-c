@@ -62,5 +62,9 @@ void wave_read_16bit_mono(MONO_PCM *pcm, char *file_name) {
   fread(data_chunk_ID, 4, 1, fp);
   printf("Data Chunk ID: %c%c%c%c\n", data_chunk_ID[0], data_chunk_ID[1], data_chunk_ID[2], data_chunk_ID[3]);
 
+  int data_chunk_size;  // 音データの長さ * channel
+  fread(&data_chunk_size, 4, 1, fp);
+  printf("Data Chunk Size: %d\n", data_chunk_size);
+
   fclose(fp);
 }
