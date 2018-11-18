@@ -16,7 +16,11 @@ void wave_read_16bit_mono(MONO_PCM *pcm, char *file_name) {
 
   int riff_chunk_size;  // [byte] 36 + (data チャンクのサイズ)
   fread(&riff_chunk_size, 4, 1, fp);
-  printf("%lu\n", sizeof(int));
   printf("RIFF Chunk Size: %d\n", riff_chunk_size);
+
+  char file_format_type[4];
+  fread(file_format_type, 1, 4, fp);
+  printf("File Format Type: %c%c%c%c\n", file_format_type[0], file_format_type[1], file_format_type[2], file_format_type[3]);
+
   fclose(fp);
 }
