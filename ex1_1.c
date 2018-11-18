@@ -38,5 +38,9 @@ void wave_read_16bit_mono(MONO_PCM *pcm, char *file_name) {
   fread(&channel, 2, 1, fp);
   printf("Channel: %d\n", channel);
 
+  int samples_per_sec;  // 標本化周波数
+  fread(&samples_per_sec, 4, 1, fp);
+  printf("Samples per Second: %d Hz\n", samples_per_sec);
+
   fclose(fp);
 }
