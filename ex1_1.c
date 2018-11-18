@@ -88,3 +88,57 @@ void wave_read_16bit_mono(MONO_PCM *pcm, char *file_name) {
 
   fclose(fp);
 }
+
+void wave_write_16bit_mono(MONO_PCM *pcm, char *file_name) {
+  char riff_chunk_ID[4] = { 'R', 'I', 'F', 'F' };
+  int riff_chunk_size = 36 + pcm->length;
+  char file_format_type[4] = { 'W', 'A', 'V', 'E' };
+  char fmt_chunk_ID[4] = { 'f', 'm', 't', ' ' };
+  int fmt_chunk_size = 16;
+  short wave_format_type = 1;
+  short channel = 1;
+
+  // 標本化周波数
+  int samples_per_sec = pcm->fs;
+  // 量子化精度
+  int bits_per_sample = pcm->bits;
+  // 1 時刻の音データを記憶するのに必要なデータ量
+  short block_size = bits_per_sample * channel / 8;  // bit -> byte の変換のために 8 で割る
+  // 1 秒の音データを記録するのに必要なデータ量
+  int bytes_per_sec = block_size * samples_per_sec;
+
+  char data_chunk_ID[4] = { 'd', 'a', 't', 'a' };
+  int data_chunk_size = pcm->length;
+
+  FILE *fp = fopen(file_name, "wb");
+
+  fwrite(riff_chunk_ID, 1, 4, fp);
+  fwrite(&riff_chunk_size, 4, 1, fp);
+  fwrite(file_format_type, 1, 4, fp);
+  fwrite(fmt_chunk_ID, 1, 4, fp);
+  fwrite(&fmt_chunk_size, 4, 1, fp);
+  fwrite(&wave_format_type, 2, 1, fp);
+  fwrite(&channel, 2, 1, fp);
+  fwrite(&samples_per_sec, 4, 1, fp);
+  fwrite(&bytes_per_sec, 4, 1, fp);
+  fwrite(&block_size, 2, 1, fp);
+  fwrite(&bits_per_sample, 2, 1, fp);
+  fwrite(data_chunk_ID, 1, 4, fp);
+  fwrite(&data_chunk_size, 4, 1, fp);
+
+  for (int n = 0; n < pcm->length; n++) {
+    double s = (pcm->s[n] + 1.0) / 2.0 * 65536.0;
+
+    // クリッピング
+    if (s > 65535.0) {
+      s = 65535.0;
+    } else if (s < 0.0) {
+      s = 0.0;
+    }
+
+    short data = (short)((int)(s + 0.5) - 32768);
+    fwrite(&data, 2, 1, fp);
+  }
+
+  fclose(fp);
+}

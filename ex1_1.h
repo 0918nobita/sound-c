@@ -10,4 +10,6 @@ typedef struct {
 
 void wave_read_16bit_mono(MONO_PCM *pcm, char *file_name);
 
+void wave_write_16bit_mono(MONO_PCM *pcm, char *file_name);
+
 #endif
