@@ -22,13 +22,15 @@ void wave_read_16bit_mono(MONO_PCM *pcm, char *file_name) {
   fread(file_format_type, 1, 4, fp);
   printf("File Format Type: %c%c%c%c\n", file_format_type[0], file_format_type[1], file_format_type[2], file_format_type[3]);
 
+  printf("---------- Fmt Chunk ----------\n");
+
   char fmt_chunk_ID[4];  // 'f' 'm' 't' ' ' 固定
   fread(fmt_chunk_ID, 1, 4, fp);
-  printf("FMT Chunk ID: %c%c%c%c\n", fmt_chunk_ID[0], fmt_chunk_ID[1], fmt_chunk_ID[2], fmt_chunk_ID[3]);
+  printf("Fmt Chunk ID: %c%c%c%c\n", fmt_chunk_ID[0], fmt_chunk_ID[1], fmt_chunk_ID[2], fmt_chunk_ID[3]);
 
   int fmt_chunk_size;  // 16 固定
   fread(&fmt_chunk_size, 4, 1, fp);
-  printf("FMT Chunk Size: %d\n", fmt_chunk_size);
+  printf("Fmt Chunk Size: %d\n", fmt_chunk_size);
 
   short wave_format_type;  // 音データの形式 (PCM の場合は 1)
   fread(&wave_format_type, 2, 1, fp);
@@ -38,7 +40,7 @@ void wave_read_16bit_mono(MONO_PCM *pcm, char *file_name) {
   fread(&channel, 2, 1, fp);
   printf("Channel: %d\n", channel);
 
-  int samples_per_sec;  // 標本化周波数
+  int samples_per_sec;  // [Hz] 標本化周波数
   fread(&samples_per_sec, 4, 1, fp);
   printf("Samples per Second: %d Hz\n", samples_per_sec);
 
@@ -49,6 +51,12 @@ void wave_read_16bit_mono(MONO_PCM *pcm, char *file_name) {
   short block_size;  // [byte] 1 時刻の音データを記憶するのに必要なデータ量
   fread(&block_size, 2, 1, fp);
   printf("Block Size: %d byte\n", block_size);
+
+  short bits_per_sample; // [bit] 量子化精度
+  fread(&bits_per_sample, 2, 1, fp);
+  printf("Bits per Sample: %d bit\n", bits_per_sample);
+
+  printf("---------- Data Chunk ----------\n");
 
   fclose(fp);
 }
