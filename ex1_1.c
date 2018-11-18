@@ -30,5 +30,9 @@ void wave_read_16bit_mono(MONO_PCM *pcm, char *file_name) {
   fread(&fmt_chunk_size, 4, 1, fp);
   printf("FMT Chunk Size: %d\n", fmt_chunk_size);
 
+  short wave_format_type;  // PCM の場合は 1
+  fread(&wave_format_type, 2, 1, fp);
+  printf("WAVE Format Type: %d\n", wave_format_type);
+
   fclose(fp);
 }
