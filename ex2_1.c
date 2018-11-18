@@ -18,5 +18,7 @@ int main(void) {
 
   wave_write_16bit_mono(&pcm, "ex2_1.wav");
 
+  free(pcm.s);
+
   return 0;
 }
