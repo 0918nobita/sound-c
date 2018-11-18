@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "ex1_1.h"
+#include "wave.h"
 
 int main(void) {
   MONO_PCM pcm0, pcm1;
