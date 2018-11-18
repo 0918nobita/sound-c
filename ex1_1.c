@@ -26,5 +26,9 @@ void wave_read_16bit_mono(MONO_PCM *pcm, char *file_name) {
   fread(fmt_chunk_ID, 1, 4, fp);
   printf("FMT Chunk ID: %c%c%c%c\n", fmt_chunk_ID[0], fmt_chunk_ID[1], fmt_chunk_ID[2], fmt_chunk_ID[3]);
 
+  int fmt_chunk_size;  // 16 固定
+  fread(&fmt_chunk_size, 4, 1, fp);
+  printf("FMT Chunk Size: %d\n", fmt_chunk_size);
+
   fclose(fp);
 }
