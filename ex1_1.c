@@ -18,9 +18,13 @@ void wave_read_16bit_mono(MONO_PCM *pcm, char *file_name) {
   fread(&riff_chunk_size, 4, 1, fp);
   printf("RIFF Chunk Size: %d\n", riff_chunk_size);
 
-  char file_format_type[4];
+  char file_format_type[4];  // 'W' 'A' 'V' 'E' 固定
   fread(file_format_type, 1, 4, fp);
   printf("File Format Type: %c%c%c%c\n", file_format_type[0], file_format_type[1], file_format_type[2], file_format_type[3]);
+
+  char fmt_chunk_ID[4];  // 'f' 'm' 't' ' ' 固定
+  fread(fmt_chunk_ID, 1, 4, fp);
+  printf("FMT Chunk ID: %c%c%c%c\n", fmt_chunk_ID[0], fmt_chunk_ID[1], fmt_chunk_ID[2], fmt_chunk_ID[3]);
 
   fclose(fp);
 }
