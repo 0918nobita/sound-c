@@ -46,5 +46,9 @@ void wave_read_16bit_mono(MONO_PCM *pcm, char *file_name) {
   fread(&bytes_per_sec, 4, 1, fp);
   printf("Bytes per Second: %d byte\n", bytes_per_sec);
 
+  short block_size;  // [byte] 1 時刻の音データを記憶するのに必要なデータ量
+  fread(&block_size, 2, 1, fp);
+  printf("Block Size: %d byte\n", block_size);
+
   fclose(fp);
 }
