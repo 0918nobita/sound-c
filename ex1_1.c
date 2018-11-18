@@ -58,5 +58,9 @@ void wave_read_16bit_mono(MONO_PCM *pcm, char *file_name) {
 
   printf("---------- Data Chunk ----------\n");
 
+  char data_chunk_ID[4]; // 'd' 'a' 't' 'a' 固定
+  fread(data_chunk_ID, 4, 1, fp);
+  printf("Data Chunk ID: %c%c%c%c\n", data_chunk_ID[0], data_chunk_ID[1], data_chunk_ID[2], data_chunk_ID[3]);
+
   fclose(fp);
 }
